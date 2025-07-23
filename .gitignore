@@ -1,0 +1,31 @@
+# Environment variables
+.env
+
+# Database files
+database/
+*.db
+
+# Logs
+logs/
+*.log
+
+# Backups
+backups/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Render build files
+build/
+dist/
