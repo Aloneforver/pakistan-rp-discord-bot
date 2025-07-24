@@ -21,7 +21,7 @@ def home():
     return '''
     <h1>🇵🇰 Pakistan RP Community Bot</h1>
     <p>Status: <span style="color: green;">✅ Online and Running</span></p>
-    <p>Platform: <span style="color: blue;">Glitch Hosting</span></p>
+    <p>Platform: <span style="color: blue;">Koyeb Hosting</span></p>
     <p>Uptime Strategy: <span style="color: purple;">Staggered Multi-Monitor</span></p>
     <hr>
     <p>Bot Features:</p>
