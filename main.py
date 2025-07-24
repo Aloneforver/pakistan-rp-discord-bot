@@ -3,23 +3,21 @@ import sys
 import logging
 import os
 from pathlib import Path
+from threading import Thread
+import time
 
 # Import keep-alive server
 from web_server import keep_alive
 
-# Fix Unicode encoding issues on Windows FIRST
+# Fix Unicode encoding issues
 os.environ['PYTHONIOENCODING'] = 'utf-8'
-if sys.platform == 'win32':
-    import codecs
-    sys.stdout = codecs.getwriter('utf-8')(sys.stdout.detach())
-    sys.stderr = codecs.getwriter('utf-8')(sys.stderr.detach())
 
 # Create necessary directories FIRST (before logging setup)
 directories = ['logs', 'backups', 'transcripts', 'rule_database', 'automation', 'announcements', 'database']
 for directory in directories:
     os.makedirs(directory, exist_ok=True)
 
-# NOW setup logging (after directories exist)
+# Setup logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
@@ -40,16 +38,26 @@ except ImportError as e:
     print("📁 Please ensure all files are in the correct directories")
     sys.exit(1)
 
+# Keep-alive function for Replit
+def keep_alive_replit():
+    def run():
+        keep_alive()
+    
+    Thread(target=run, daemon=True).start()
+
 async def main():
     """Main bot startup function"""
     try:
         # Start the keep-alive web server
-        print("🌐 Starting keep-alive web server...")
-        keep_alive()
+        print("🌐 Starting keep-alive web server for Replit...")
+        keep_alive_replit()
+        
+        # Small delay to let server start
+        await asyncio.sleep(2)
         
         # Validate configuration
         if not Config.validate_environment():
-            print("❌ Environment configuration incomplete. Check .env file.")
+            print("❌ Environment configuration incomplete. Check Replit Secrets.")
             sys.exit(1)
         
         # Display startup banner
@@ -65,6 +73,7 @@ async def main():
 ║ ⚡ Automation: Maximum Efficiency         ║
 ║ 🚫 AI Dependency: Completely Removed      ║
 ║ 🌐 Keep-Alive Server: Active              ║
+║ 🖥️ Platform: Replit Hosting               ║
 ╚═══════════════════════════════════════════╝
         """)
         
@@ -83,4 +92,5 @@ async def main():
         sys.exit(1)
 
 if __name__ == "__main__":
+    # Keep the repl alive
     asyncio.run(main())
