@@ -4,7 +4,6 @@ import logging
 import os
 from pathlib import Path
 from threading import Thread
-import time
 
 # Import keep-alive server
 from web_server import keep_alive
@@ -38,8 +37,8 @@ except ImportError as e:
     print("📁 Please ensure all files are in the correct directories")
     sys.exit(1)
 
-# Keep-alive function for Replit
-def keep_alive_replit():
+# Keep-alive function for Glitch
+def keep_alive_glitch():
     def run():
         keep_alive()
     
@@ -48,16 +47,16 @@ def keep_alive_replit():
 async def main():
     """Main bot startup function"""
     try:
-        # Start the keep-alive web server
-        print("🌐 Starting keep-alive web server for Replit...")
-        keep_alive_replit()
+        # Start the keep-alive web server for Glitch
+        print("🌐 Starting multi-endpoint web server for Glitch...")
+        keep_alive_glitch()
         
         # Small delay to let server start
         await asyncio.sleep(2)
         
         # Validate configuration
         if not Config.validate_environment():
-            print("❌ Environment configuration incomplete. Check Replit Secrets.")
+            print("❌ Environment configuration incomplete. Check Glitch .env file.")
             sys.exit(1)
         
         # Display startup banner
@@ -72,8 +71,9 @@ async def main():
 ║ 🎛️ Dashboards: Modern UI/UX              ║
 ║ ⚡ Automation: Maximum Efficiency         ║
 ║ 🚫 AI Dependency: Completely Removed      ║
-║ 🌐 Keep-Alive Server: Active              ║
-║ 🖥️ Platform: Replit Hosting               ║
+║ 🌐 Multi-Endpoint Server: Active          ║
+║ 🖥️ Platform: Glitch Hosting               ║
+║ 📡 Strategy: Staggered Monitoring         ║
 ╚═══════════════════════════════════════════╝
         """)
         
@@ -92,5 +92,5 @@ async def main():
         sys.exit(1)
 
 if __name__ == "__main__":
-    # Keep the repl alive
+    # Start the bot
     asyncio.run(main())
