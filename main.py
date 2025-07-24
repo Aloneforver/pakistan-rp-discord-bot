@@ -3,20 +3,23 @@ import sys
 import logging
 import os
 from pathlib import Path
-from threading import Thread
 
 # Import keep-alive server
 from web_server import keep_alive
 
-# Fix Unicode encoding issues
+# Fix Unicode encoding issues on Windows FIRST
 os.environ['PYTHONIOENCODING'] = 'utf-8'
+if sys.platform == 'win32':
+    import codecs
+    sys.stdout = codecs.getwriter('utf-8')(sys.stdout.detach())
+    sys.stderr = codecs.getwriter('utf-8')(sys.stderr.detach())
 
 # Create necessary directories FIRST (before logging setup)
 directories = ['logs', 'backups', 'transcripts', 'rule_database', 'automation', 'announcements', 'database']
 for directory in directories:
     os.makedirs(directory, exist_ok=True)
 
-# Setup logging
+# NOW setup logging (after directories exist)
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
@@ -37,26 +40,16 @@ except ImportError as e:
     print("📁 Please ensure all files are in the correct directories")
     sys.exit(1)
 
-# Keep-alive function for Glitch
-def keep_alive_glitch():
-    def run():
-        keep_alive()
-    
-    Thread(target=run, daemon=True).start()
-
 async def main():
     """Main bot startup function"""
     try:
-        # Start the keep-alive web server for Glitch
-        print("🌐 Starting multi-endpoint web server for Glitch...")
-        keep_alive_glitch()
-        
-        # Small delay to let server start
-        await asyncio.sleep(2)
+        # Start the keep-alive web server
+        print("🌐 Starting keep-alive web server...")
+        keep_alive()
         
         # Validate configuration
         if not Config.validate_environment():
-            print("❌ Environment configuration incomplete. Check Glitch .env file.")
+            print("❌ Environment configuration incomplete. Check .env file.")
             sys.exit(1)
         
         # Display startup banner
@@ -71,8 +64,8 @@ async def main():
 ║ 🎛️ Dashboards: Modern UI/UX              ║
 ║ ⚡ Automation: Maximum Efficiency         ║
 ║ 🚫 AI Dependency: Completely Removed      ║
-║ 🌐 Multi-Endpoint Server: Active          ║
-║ 🖥️ Platform: Glitch Hosting               ║
+║ 🌐 Keep-Alive Server: Active              ║
+║ 🖥️ Platform: Render Hosting               ║
 ║ 📡 Strategy: Staggered Monitoring         ║
 ╚═══════════════════════════════════════════╝
         """)
@@ -92,5 +85,4 @@ async def main():
         sys.exit(1)
 
 if __name__ == "__main__":
-    # Start the bot
     asyncio.run(main())
