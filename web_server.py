@@ -11,7 +11,7 @@ def get_bot_status():
         "status": "online",
         "bot": "Pakistan RP Community Bot",
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "platform": "Glitch",
+        "platform": "Render",
         "uptime_strategy": "Staggered Multi-Monitor"
     }
 
@@ -21,7 +21,7 @@ def home():
     return '''
     <h1>🇵🇰 Pakistan RP Community Bot</h1>
     <p>Status: <span style="color: green;">✅ Online and Running</span></p>
-    <p>Platform: <span style="color: blue;">Koyeb Hosting</span></p>
+    <p>Platform: <span style="color: blue;">Render Hosting</span></p>
     <p>Uptime Strategy: <span style="color: purple;">Staggered Multi-Monitor</span></p>
     <hr>
     <p>Bot Features:</p>
@@ -82,12 +82,12 @@ def uptime():
     })
 
 def run():
-    port = int(os.environ.get('PORT', 8000))  #koyeb uses port 8000
+    port = int(os.environ.get('PORT', 10000))  # Render uses port 10000
     app.run(host='0.0.0.0', port=port)
 
 def keep_alive():
     t = threading.Thread(target=run)
     t.daemon = True
     t.start()
-    print("🌐 Multi-endpoint web server started")
+    print("🌐 Multi-endpoint web server started for Render")
     print("📡 Ready for staggered monitoring strategy")
